@@ -3,9 +3,18 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ShoppingCart, Heart, Star } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../features/cart/cartSlice";
 
 export const FeaturedProducts = ({ products, isLoading, error }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (e, product) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(addToCart(product));
+  };
 
   return (
     <div className="bg-white py-16 px-4">
@@ -46,13 +55,22 @@ export const FeaturedProducts = ({ products, isLoading, error }) => {
                       <span className="ml-2 text-gray-600">{product.rating}</span>
                     </div>
                   </div>
-                  <button className="p-2 hover:bg-gray-200 rounded-full">
+                  <button 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    className="p-2 hover:bg-gray-200 rounded-full"
+                  >
                     <Heart className="w-6 h-6 text-gray-400 hover:text-red-500" />
                   </button>
                 </div>
                 <div className="mt-4 flex justify-between items-center">
                   <span className="text-2xl font-bold text-gray-900">${product.price}</span>
-                  <button className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center">
+                  <button 
+                    onClick={(e) => handleAddToCart(e, product)}
+                    className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center"
+                  >
                     <ShoppingCart className="w-5 h-5 mr-2" />
                     Add to Cart
                   </button>
