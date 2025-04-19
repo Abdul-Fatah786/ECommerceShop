@@ -2,17 +2,20 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../features/cart/cartSlice";
+import { Navbar } from "../components/Navbar";
 
 const ProductDetail = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                // Validate the ID before making the request
                 if (!id || typeof id !== "string") {
                     throw new Error("Invalid product ID");
                 }
@@ -32,14 +35,20 @@ const ProductDetail = () => {
         fetchProduct();
     }, [id]);
 
+    const handleAddToCart = () => {
+        if (product) {
+            dispatch(addToCart(product));
+        }
+    };
+
     if (isLoading) return <div className="text-center p-8">Loading...</div>;
     if (error) return <div className="text-center p-8 text-red-600">{error}</div>;
     if (!product) return <div className="text-center p-8">Product not found</div>;
 
     return (
         <>
-        
-            <div className="min-h-screen bg-gray-50 p-8">
+            <Navbar />
+            <div className="min-h-screen bg-gray-50 p-8 mt-16">
                 <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
                     <div className="grid md:grid-cols-2 gap-8 p-8">
                         <div className="aspect-square bg-gray-100 rounded-xl">
@@ -56,7 +65,10 @@ const ProductDetail = () => {
                                 ${product.price}
                             </div>
                             <div className="flex gap-4">
-                                <button className="bg-orange-600 text-white px-6 py-3 rounded-xl hover:bg-orange-700 transition-colors">
+                                <button 
+                                    onClick={handleAddToCart}
+                                    className="bg-orange-600 text-white px-6 py-3 rounded-xl hover:bg-orange-700 transition-colors"
+                                >
                                     Add to Cart
                                 </button>
                                 <button className="border-2 border-orange-600 text-orange-600 px-6 py-3 rounded-xl hover:bg-orange-50 transition-colors">
