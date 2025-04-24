@@ -29,12 +29,15 @@ export const Navbar = () => {
           >
             Shop
           </button>
-          <button className="p-2 relative">
-          <ShoppingCart className="w-6 h-6 text-gray-600" />
-          <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-            {totalItems}
-          </span>
-        </button>
+          <button
+            onClick={() => navigate("/cart")}
+            className="p-2 relative "
+          >
+            <ShoppingCart className="w-6 h-6 text-gray-600 hover:text-orange-500" />
+            <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              {totalItems}
+            </span>
+          </button>
 
           <button
             onClick={() => navigate("/login")}

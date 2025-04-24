@@ -10,6 +10,8 @@ import OtpVerification from "./pages/OtpVerification";
 import ProductList from "./pages/ProductsList";
 import ProductDetail from "./pages/ProductDetail";
 import AdminDashboard from "./pages/AdminDashboard";
+import Cart from "./pages/Cart";
+// import Wishlist from "./pages/Wishlist";
   
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify-otp" element={<OtpVerification />} />
         <Route path="/shop" element={<ProductList />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="*" element={<NotFound />} />

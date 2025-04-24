@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../features/cart/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, removeFromCart } from "../features/cart/cartSlice";
 import { Navbar } from "../components/Navbar";
 
 const ProductDetail = () => {
@@ -12,6 +12,7 @@ const ProductDetail = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const dispatch = useDispatch();
+    const cartItems = useSelector((state) => state.cart.items);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -35,9 +36,17 @@ const ProductDetail = () => {
         fetchProduct();
     }, [id]);
 
-    const handleAddToCart = () => {
+    const isInCart = (productId) => {
+        return cartItems.some((item) => item._id === productId);
+    };
+
+    const handleToggleCart = () => {
         if (product) {
-            dispatch(addToCart(product));
+            if (isInCart(product._id)) {
+                dispatch(removeFromCart(product._id));
+            } else {
+                dispatch(addToCart(product));
+            }
         }
     };
 
@@ -65,11 +74,15 @@ const ProductDetail = () => {
                                 ${product.price}
                             </div>
                             <div className="flex gap-4">
-                                <button 
-                                    onClick={handleAddToCart}
-                                    className="bg-orange-600 text-white px-6 py-3 rounded-xl hover:bg-orange-700 transition-colors"
+                                <button
+                                    onClick={handleToggleCart}
+                                    className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                                        isInCart(product._id)
+                                            ? "bg-red-100 text-red-600 hover:bg-red-200"
+                                            : "bg-orange-100 text-orange-600 hover:bg-orange-200"
+                                    }`}
                                 >
-                                    Add to Cart
+                                    {isInCart(product._id) ? "Remove From Cart" : "Add to Cart"}
                                 </button>
                                 <button className="border-2 border-orange-600 text-orange-600 px-6 py-3 rounded-xl hover:bg-orange-50 transition-colors">
                                     Buy Now

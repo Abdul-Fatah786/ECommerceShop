@@ -3,12 +3,17 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ShoppingCart, Heart, Star } from "lucide-react";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../features/cart/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, removeFromCart } from "../features/cart/cartSlice";
 
 export const FeaturedProducts = ({ products, isLoading, error }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
+
+  const isInCart = (productId) => {
+    return cartItems.some((item) => item._id === productId);
+  }
 
   const handleAddToCart = (e, product) => {
     e.preventDefault();
@@ -16,6 +21,11 @@ export const FeaturedProducts = ({ products, isLoading, error }) => {
     dispatch(addToCart(product));
   };
 
+  const handleRemoveFromCart = (e, product) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(removeFromCart(product._id));
+  };
   return (
     <div className="bg-white py-16 px-4">
       <div className="max-w-6xl mx-auto">
@@ -55,7 +65,7 @@ export const FeaturedProducts = ({ products, isLoading, error }) => {
                       <span className="ml-2 text-gray-600">{product.rating}</span>
                     </div>
                   </div>
-                  <button 
+                  <button
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -67,13 +77,21 @@ export const FeaturedProducts = ({ products, isLoading, error }) => {
                 </div>
                 <div className="mt-4 flex justify-between items-center">
                   <span className="text-2xl font-bold text-gray-900">${product.price}</span>
-                  <button 
-                    onClick={(e) => handleAddToCart(e, product)}
-                    className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center"
-                  >
-                    <ShoppingCart className="w-5 h-5 mr-2" />
-                    Add to Cart
-                  </button>
+                  {isInCart(product._id) ? (
+                    <button
+                      onClick={(e) => handleRemoveFromCart(e, product)}
+                      className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all"
+                    >
+                      <ShoppingCart className="w-6 h-6" />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={(e) => handleAddToCart(e, product)}
+                      className="p-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-all"
+                    >
+                      <ShoppingCart className="w-6 h-6" />
+                    </button>
+                  )}
                 </div>
               </Link>
             ))}
