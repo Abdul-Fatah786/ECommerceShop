@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../features/cart/cartSlice";
+import { addToCart, removeFromCart } from "../features/cart/cartSlice";
 import { fetchProducts } from "../features/products/productSlice";
 import { Navbar } from "../components/Navbar";
 
@@ -57,12 +57,19 @@ const ProductList = () => {
 
 const ProductCard = ({ product }) => {
     const dispatch = useDispatch();
+    const cartItems = useSelector((state) => state.cart.items);
 
-    const handleAddToCart = (e) => {
+    const isInCart = cartItems.some((item) => item._id === product._id);
+
+    const handleCartToggle = (e) => {
         e.preventDefault();
-        dispatch(addToCart(product));
+        if (isInCart) {
+            // Logic to remove from cart can be added here
+            dispatch(removeFromCart(product._id));
+        } else {
+            dispatch(addToCart(product));
+        }
     };
-
     return (
         <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
             <Link to={`/product/${product._id}`} className="block">
@@ -81,10 +88,12 @@ const ProductCard = ({ product }) => {
                 <div className="flex justify-between items-center">
                     <span className="text-orange-600 font-bold">${product.price}</span>
                     <button
-                        onClick={handleAddToCart}
-                        className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm hover:bg-orange-200 transition-colors"
-                    >
-                        Add to Cart
+                        onClick={handleCartToggle}
+                        className={`px-3 py-1 rounded-full text-sm transition-colors ${isInCart
+                                ? "bg-red-100 text-red-600 hover:bg-red-200"
+                                : "bg-orange-100 text-orange-600 hover:bg-orange-200"
+                            }`}                    >
+                        {isInCart ? "Remove from Cart" : "Add to Cart"}
                     </button>
                 </div>
             </div>
