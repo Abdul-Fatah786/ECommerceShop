@@ -3,10 +3,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ShoppingCart } from "lucide-react";
 import { useSelector } from "react-redux";
+import { useAuth } from "../context/AuthContext";
+
 
 export const Navbar = () => {
   const navigate = useNavigate();
   const totalItems = useSelector((state) => state.cart.totalItems);
+  const { user, logout } = useAuth();
 
   return (
     <nav className="fixed w-full top-0 left-0 bg-white shadow-sm z-50">
@@ -40,10 +43,16 @@ export const Navbar = () => {
           </button>
 
           <button
-            onClick={() => navigate("/login")}
+            onClick={() => {
+              if (user) {
+                logout();
+              } else {
+                navigate("/login");
+              }
+            }}
             className="text-gray-600 hover:text-orange-500 font-medium"
           >
-            Sign In
+            {user ? "Sign Out" : "Sign In"}
           </button>
         </div>
       </div>

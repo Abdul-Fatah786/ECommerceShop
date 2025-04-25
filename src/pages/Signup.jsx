@@ -39,7 +39,7 @@ function Signup() {
 
             localStorage.setItem("userEmail", formData.email)
 
-            navigate('/verify-otp');
+            navigate('/');
         } catch (error) {
             console.error('Error during signup:', error);
         } finally {
