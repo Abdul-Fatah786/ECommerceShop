@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
 import store from './app/store'; // Make sure this path is correct
 import './index.css';
+import { AuthProvider } from './context/AuthContext.jsx';
 
 const root = createRoot(document.getElementById('root'));
 
@@ -15,7 +16,9 @@ root.render(
   <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider >
       </BrowserRouter>
     </Provider>
   </StrictMode>

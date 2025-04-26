@@ -33,15 +33,20 @@ function Signup() {
             phoneNo: formData.phone,
             password: formData.password
         };
+        console.log(userData, "User Data");
+        console.log(formData, "Form Data");
 
         try {
             await axios.post('http://localhost:3001/users/register', userData);
 
-            localStorage.setItem('userEmail', formData.email);
+            const tokenSaved = localStorage.setItem('userEmail', formData.email);
+            console.log(tokenSaved, "Token Saved");
+
+            // Redirect to OTP verification page
             navigate('/verify-otp');
         } catch (error) {
             const message = error.response?.data?.message || 'Registration failed';
-            setPasswordError(message);  
+            setPasswordError(message);
         } finally {
             setIsSubmitting(false);
         }
@@ -140,6 +145,10 @@ function Signup() {
                         </div>
                     </div>
 
+                    {passwordError && (
+                        <p className="text-red-500 text-sm text-center mt-1">{passwordError}</p>
+                    )}
+
                     <button
                         type="submit"
                         disabled={isSubmitting}
@@ -147,7 +156,7 @@ function Signup() {
                     >
                         {isSubmitting ? 'Creating Account...' : 'Create Account'}
                     </button>
-
+                    
                     <div className="relative mt-8">
                         <div className="absolute inset-0 flex items-center">
                             <div className="w-full border-t border-gray-200"></div>

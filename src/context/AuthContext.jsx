@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -26,7 +26,7 @@ function AuthProvider({ children }) {
         setUser(response.data.user);
       } catch (error) {
         localStorage.removeItem('token');
-        setUser(null); // Added to clear user state on invalid token
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -61,5 +61,4 @@ function AuthProvider({ children }) {
   );
 }
 
-export default AuthProvider;
-export { AuthContext, AuthProvider };
+export { AuthProvider, AuthContext };
