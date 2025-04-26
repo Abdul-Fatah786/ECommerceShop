@@ -37,11 +37,11 @@ function Signup() {
         try {
             await axios.post('http://localhost:3001/users/register', userData);
 
-            localStorage.setItem("userEmail", formData.email)
-
-            navigate('/');
+            localStorage.setItem('userEmail', formData.email);
+            navigate('/verify-otp');
         } catch (error) {
-            console.error('Error during signup:', error);
+            const message = error.response?.data?.message || 'Registration failed';
+            setPasswordError(message);  
         } finally {
             setIsSubmitting(false);
         }

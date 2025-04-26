@@ -32,14 +32,22 @@ function Login() {
 
         try {
             const response = await axios.post('http://localhost:3001/users/login', loginData);
-            console.log("response data ", response.data)
 
-            if (response.data.message === "Login successful") {
-                navigate('/');
-            }
+            localStorage.setItem('authToken', response.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+
+            navigate('/');
         } catch (error) {
-            console.error('Error during login:', error);
-            setPasswordError("An error occurred during login.");
+            const message = error.response?.data?.message || 'Login failed';
+            if (error.response?.status === 401) {
+                if (message.includes('verify')) {
+                    navigate('/verify-otp');
+                } else {
+                    setPasswordError(message);
+                }
+            } else {
+                setPasswordError(message);
+            }
         } finally {
             setIsSubmitting(false);
         }

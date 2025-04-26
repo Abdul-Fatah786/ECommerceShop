@@ -5,7 +5,6 @@ import { ShoppingCart } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useAuth } from "../context/AuthContext";
 
-
 export const Navbar = () => {
   const navigate = useNavigate();
   const totalItems = useSelector((state) => state.cart.totalItems);
@@ -34,7 +33,7 @@ export const Navbar = () => {
           </button>
           <button
             onClick={() => navigate("/cart")}
-            className="p-2 relative "
+            className="p-2 relative"
           >
             <ShoppingCart className="w-6 h-6 text-gray-600 hover:text-orange-500" />
             <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -43,13 +42,7 @@ export const Navbar = () => {
           </button>
 
           <button
-            onClick={() => {
-              if (user) {
-                logout();
-              } else {
-                navigate("/login");
-              }
-            }}
+            onClick={() => user ? logout() : navigate("/login")}
             className="text-gray-600 hover:text-orange-500 font-medium"
           >
             {user ? "Sign Out" : "Sign In"}
