@@ -40,11 +40,7 @@ function Login() {
         } catch (error) {
             const message = error.response?.data?.message || 'Login failed';
             if (error.response?.status === 401) {
-                if (message.includes('verify')) {
-                    navigate('/verify-otp');
-                } else {
-                    setPasswordError(message);
-                }
+                setPasswordError(message);
             } else {
                 setPasswordError(message);
             }

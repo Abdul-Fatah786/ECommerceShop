@@ -43,7 +43,7 @@ function Signup() {
             console.log(tokenSaved, "Token Saved");
 
             // Redirect to OTP verification page
-            navigate('/verify-otp');
+            navigate('/');
         } catch (error) {
             const message = error.response?.data?.message || 'Registration failed';
             setPasswordError(message);
